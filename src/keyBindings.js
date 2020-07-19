@@ -4,12 +4,10 @@ import {
 } from "./utilities/helper.js"
 
 import {
-  newDefaultBlock,
+  renderNewBlock,
   removeBlock,
-  focusPreviousField,
-  focusNextField,
-  moveFocusedBlockUp,
-  moveFocusedBlockDown
+  focusAnotherField,
+  moveFocusedBlock
 } from "./callback/callback.js"
 
 class FreedomEditorKeyBindings {
@@ -18,7 +16,11 @@ class FreedomEditorKeyBindings {
       keybindings: {
         newDefaultBlock: {
           inputCombination: ['Enter'],
-          callback: newDefaultBlock
+          callback: (event, currentActiveBlock, editor) => renderNewBlock(event, currentActiveBlock, editor, false)
+        },
+        newSubBlock: {
+          inputCombination: ['Shift', 'Enter'],
+          callback: (event, currentActiveBlock, editor) => renderNewBlock(event, currentActiveBlock, editor, true)
         },
         removeBlock: {
           inputCombination: ['Backspace'],
@@ -26,19 +28,19 @@ class FreedomEditorKeyBindings {
         },
         focusPreviousField: {
           inputCombination: ['ArrowUp'],
-          callback: focusPreviousField
+          callback: (event, currentActiveBlock, editor) => focusAnotherField(event, currentActiveBlock, editor, 'previous')
         },
         focusNextField: {
           inputCombination: ['ArrowDown'],
-          callback: focusNextField
+          callback: (event, currentActiveBlock, editor) => focusAnotherField(event, currentActiveBlock, editor, 'next')
         },
         moveFocusedBlockUp: {
           inputCombination: ['Shift', 'ArrowUp'],
-          callback: moveFocusedBlockUp
+          callback: (event, currentActiveBlock, editor) => moveFocusedBlock(event, currentActiveBlock, editor, 'up')
         },
         moveFocusedBlockDown: {
           inputCombination: ['Shift', 'ArrowDown'],
-          callback: moveFocusedBlockDown
+          callback: (event, currentActiveBlock, editor) => moveFocusedBlock(event, currentActiveBlock, editor, 'down')
         }
       },
       debounceLimit: 200 //ms

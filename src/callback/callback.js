@@ -1,10 +1,26 @@
-const newDefaultBlock = (event, currentActiveBlock, editor) => {
+const renderNewBlock = (event, currentActiveBlock, editor, createSubBlock) => {
   event.preventDefault()
   if (currentActiveBlock.nextElementSibling) {
     editor.shiftBlockFocus(currentActiveBlock, 'down', currentActiveBlock.nextElementSibling)
-  } else {
-    const newBlock = editor.renderBlock(editor.options.defaultBlock)
-    editor.shiftBlockFocus(currentActiveBlock, 'down', newBlock)
+    return
+  }
+
+  switch (createSubBlock) {
+    case true:
+      if (!currentActiveBlock.matches('[data-allow-sub-block]')) {
+        return
+      }
+
+      console.log(editor)
+      console.log(currentActiveBlock.dataset.blockType)
+      console.log(editor.options.registeredBlocks)
+      break
+
+    case false:
+      const newBlock = editor.renderBlock(editor.options.defaultBlock)
+      editor.shiftBlockFocus(currentActiveBlock, 'down', newBlock)
+      break
+    default:
   }
 }
 
@@ -17,39 +33,58 @@ const removeBlock = (event, currentActiveBlock, editor) => {
   event.preventDefault()
 }
 
-const focusPreviousField = (event, currentActiveBlock, editor) => {
+const focusAnotherField = (event, currentActiveBlock, editor, focusDirection) => {
   event.preventDefault()
-  if (currentActiveBlock.previousElementSibling) {
-    editor.shiftBlockFocus(currentActiveBlock, 'up', currentActiveBlock.previousElementSibling)
+  switch (focusDirection) {
+    case 'previous':
+      if (currentActiveBlock.previousElementSibling) {
+        editor.shiftBlockFocus(currentActiveBlock, 'up', currentActiveBlock.previousElementSibling)
+      }
+      break
+
+    case 'next':
+      if (currentActiveBlock.nextElementSibling) {
+        editor.shiftBlockFocus(currentActiveBlock, 'down', currentActiveBlock.nextElementSibling)
+      }
+      break
+
+    default:
   }
 }
 
-const focusNextField = (event, currentActiveBlock, editor) => {
+const moveFocusedBlock = (event, currentActiveBlock, editor, moveDirection) => {
   event.preventDefault()
-  if (currentActiveBlock.nextElementSibling) {
-    editor.shiftBlockFocus(currentActiveBlock, 'down', currentActiveBlock.nextElementSibling)
-  }
-}
 
-const moveFocusedBlockUp = (event, currentActiveBlock, editor) => {
-  event.preventDefault()
-  if (currentActiveBlock.previousElementSibling) {
-    editor.moveBlock(currentActiveBlock, 'up')
-  }
-}
+  const activeField = document.activeElement
 
-const moveFocusedBlockDown = (event, currentActiveBlock, editor) => {
-  event.preventDefault()
-  if (currentActiveBlock.nextElementSibling) {
-    editor.moveBlock(currentActiveBlock, 'down')
+  switch (moveDirection) {
+    case 'up':
+
+      if (currentActiveBlock.previousElementSibling) {
+        editor.moveBlock(currentActiveBlock, 'up')
+        editor.shiftFieldFocus(activeField)
+      }
+      break
+
+    case 'down':
+
+      if (currentActiveBlock.nextElementSibling) {
+        editor.moveBlock(currentActiveBlock, 'down')
+        editor.shiftFieldFocus(activeField)
+      }
+      break
+
+    default:
   }
+
+  // Manually clean userInputCombination, as keyup event is not fired
+  // userInputCombination = []
+  // console.log(userInputCombination);
 }
 
 export {
-  newDefaultBlock,
+  renderNewBlock,
   removeBlock,
-  focusPreviousField,
-  focusNextField,
-  moveFocusedBlockUp,
-  moveFocusedBlockDown
+  focusAnotherField,
+  moveFocusedBlock
 }
