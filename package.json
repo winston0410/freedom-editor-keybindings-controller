@@ -1,6 +1,6 @@
 {
   "name": "@freedom-editor/keybindings-controller",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Keybindings controllers for Freedom Editor",
   "main": "./src/index.js",
   "scripts": {
