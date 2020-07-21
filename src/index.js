@@ -1,14 +1,14 @@
 import {
   debounce,
   isArrayIdentical
-} from "./utilities/helper.js"
+} from './utilities/helper.js'
 
 import {
   renderNewBlock,
   removeBlock,
   focusAnotherField,
   moveFocusedBlock
-} from "./callback/callback.js"
+} from './callback/callback.js'
 
 class FreedomEditorKeyBindings {
   constructor (customOptions) {
@@ -43,38 +43,29 @@ class FreedomEditorKeyBindings {
           callback: (event, currentActiveBlock, editor) => moveFocusedBlock(event, currentActiveBlock, editor, 'down')
         }
       },
-      debounceLimit: 200 //ms
+      debounceLimit: 200 // ms
     }
 
     this.options = {
       ...defaultOptions,
       ...customOptions
     }
-
-    if (this.options.editor === undefined) {
-      throw new Error('You need to pass FreedomEditor instance as the value of property "editor" in "options" object.')
-    }
   };
 
-  init = (renderedBlock) => {
-
+  init (editorInstance, renderedBlock) {
     const userInputCombination = []
 
     renderedBlock.addEventListener('keydown', (event) => {
-
       const currentActiveBlock = event.target.closest('[data-block-type]')
-      const editor = this.options.editor
 
       if (!event.repeat) {
         userInputCombination.push(event.key)
       }
 
       for (const keybinding in this.options.keybindings) {
-
         if (isArrayIdentical(userInputCombination, this.options.keybindings[keybinding].inputCombination)) {
-          this.options.keybindings[keybinding].callback(event, currentActiveBlock, editor)
+          this.options.keybindings[keybinding].callback(event, currentActiveBlock, editorInstance)
         }
-
       }
     })
 

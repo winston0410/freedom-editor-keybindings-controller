@@ -1,8 +1,8 @@
 {
   "name": "@freedom-editor/keybindings-controller",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Keybindings controllers for Freedom Editor",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "build": "npx rollup -c"
   },
