@@ -4,7 +4,8 @@
   "description": "Keybindings controllers for Freedom Editor",
   "main": "./src/index.js",
   "scripts": {
-    "build": "npx rollup -c"
+    "build": "npx rollup -c",
+    "release": "npx rollup -c; np"
   },
   "keywords": [
     "keybindings",
